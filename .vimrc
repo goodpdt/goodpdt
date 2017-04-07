@@ -14,6 +14,8 @@ set hlsearch
 set showmatch
 set showcmd
 set mouse=a
+set nu
+set nowrap
 
 nnoremap <C-L> :nohl<CR><C-L>
 
@@ -47,6 +49,8 @@ set startofline
 set omnifunc=syntaxcomplete#Complete
 
 
+source cscope_maps.vim
+
 
 " --- move around splits {
 " move to and maximize the below split 
@@ -66,41 +70,75 @@ set wmh=0                     " set the min height of a window to 0 so we can ma
 "Vundle~~
 set nocompatible               " be iMproved
 filetype off                   " required!
+" set the runtime path to include Vundle and initialize
+ set rtp+=~/.vim/bundle/Vundle.vim
+ call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+" let Vundle manage Vundle, required
+ Plugin 'VundleVim/Vundle.vim'
+ Plugin 'Lokaltog/vim-easymotion'
+ Plugin 'tpope/vim-rails.git'
+ Plugin 'FuzzyFinder'
+ Plugin 'scrooloose/nerdtree'
+ 			let NERDTreeWinPos='right'
+			let NERDTreeWinSize=30
+			map <F2> :NERDTreeToggle<CR>
+ Plugin 'msanders/snipmate.vim'
+ Plugin 'Valloric/YouCompleteMe'
+ 
+ Plugin 'scrooloose/syntastic'
+ 			set statusline+=%#warningmsg#
+			set statusline+=%{SyntasticStatuslineFlag()}
+			set statusline+=%*
+			let g:syntastic_always_populate_loc_list = 1
+			let g:syntastic_auto_loc_list = 1
+			let g:syntastic_check_on_open = 1
+			let g:syntastic_check_on_wq = 0
+ Plugin 'bling/vim-airline'
+ Plugin 'majutsushi/tagbar'
+ nmap <F8> :TagbarToggle<CR>
+ 
 
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
-
-" let Vundle manage Vundle
-" required! 
-Bundle 'gmarik/vundle'
-
-" original repos on github
-Bundle 'tpope/vim-fugitive'
-Bundle 'Lokaltog/vim-easymotion'
-Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
-Bundle 'tpope/vim-rails.git'
-" vim-scripts repos
-Bundle 'L9'
-Bundle 'FuzzyFinder'
-" non github repos
-Bundle 'git://git.wincent.com/command-t.git'
-" git repos on your local machine (ie. when working on your own plugin)
-"Bundle 'file:///goodpdt/gmarik/path/to/plugin'
-"Suggest Bundles
-Bundle 'scrooloose/nerdtree'
-	let NERDTreeWinPos='right'
-	let NERDTreeWinSize=30
-	map <F2> :NERDTreeToggle<CR>
-Bundle 'msanders/snipmate.vim'
-
-
-filetype plugin indent on     " required!
+" The following are examples of different formats supported.
+" Keep Plugin commands between vundle#begin/end.
+" plugin on GitHub repo
+ Plugin 'tpope/vim-fugitive'
+" plugin from http://vim-scripts.org/vim/scripts.html
+ Plugin 'L9'
+" Git plugin not hosted on GitHub
+ Plugin 'git://git.wincent.com/command-t.git'
+" git repos on your local machine (i.e. when working on your own plugin)
+" Plugin 'file:///home/gmarik/path/to/plugin'
+" The sparkup vim script is in a subdirectory of this repo called vim.
+" Pass the path to set the runtimepath properly.
+ Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+ Plugin 'javacomplete'
+ Plugin 'Lokaltog/vim-powerline'
+ Plugin 'powerline/fonts'
+" Install L9 and avoid a Naming conflict if you've already installed a
+" different version somewhere else.
+" Plugin 'ascenator/L9', {'name': 'newL9'}
+" All of your Plugins must be added before the following line
+ call vundle#end()            " required
+ filetype plugin indent on    " required
+" To ignore plugin indent changes, instead use:
+" filetype plugin on
 "
 " Brief help
-" :BundleList          - list configured bundles
-" :BundleInstall(!)    - install(update) bundles
-" :BundleSearch(!) foo - search(or refresh cache first) for foo
-" :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just
+" :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to
+" auto-approve removal
 "
 " see :h vundle for more details or wiki for FAQ
-" NOTE: comments after Bundle command are not allowed..
+" Put your non-Plugin stuff after this line
+
+
+" javacomplete 配置
+" Only do this part when compiled with support for autocommands.
+ autocmd Filetype java setlocal omnifunc=javacomplete#Complete
+ autocmd Filetype java setlocal completefunc=javacomplete#CompleteParamsInfo
+ autocmd FileType java inoremap <buffer>. .<C-X><C-O><C-P>
